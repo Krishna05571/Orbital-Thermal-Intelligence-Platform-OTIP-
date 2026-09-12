@@ -14,6 +14,7 @@ import {
 import { REGIONS } from './constants/taxonomy';
 import { FacilityFingerprintModal } from './components/FacilityFingerprintModal';
 import { EventInvestigationModal } from './components/EventInvestigationModal';
+import { HotspotDetailPanel } from './components/HotspotDetailPanel';
 import { LandingPage } from './components/landing/LandingPage';
 
 export function App() {
@@ -319,6 +320,21 @@ export function App() {
             </div>
           )}
         </main>
+
+        {/* Right Dynamic Telemetry Detail Panel */}
+        <HotspotDetailPanel
+          selectedHotspot={selectedHotspot}
+          selectedCluster={selectedCluster}
+          recentHotspots={visibleHotspots}
+          onSelectHotspot={handleSelectHotspot}
+          onClose={() => {
+            handleSelectHotspot(null);
+            handleSelectCluster(null);
+          }}
+          onViewFingerprint={(facility) => setSelectedFingerprintFacility(facility)}
+          onInvestigateEvent={(event) => setSelectedInvestigationEvent(event)}
+          onSetRoute={setActiveRoute}
+        />
       </div>
     </div>
   );

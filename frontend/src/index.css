@@ -63,6 +63,21 @@ body {
   border: 1px solid rgba(56, 189, 248, 0.2) !important;
 }
 
+/* Custom Leaflet Tooltip Overlay */
+.leaflet-tooltip {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+.leaflet-tooltip-top:before,
+.leaflet-tooltip-bottom:before,
+.leaflet-tooltip-left:before,
+.leaflet-tooltip-right:before {
+  display: none !important;
+}
+
 /* Anomaly Pulse Marker */
 @keyframes anomaly-pulse {
   0% {
