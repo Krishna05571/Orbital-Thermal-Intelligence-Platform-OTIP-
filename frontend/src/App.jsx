@@ -14,8 +14,13 @@ import {
 import { REGIONS } from './constants/taxonomy';
 import { FacilityFingerprintModal } from './components/FacilityFingerprintModal';
 import { EventInvestigationModal } from './components/EventInvestigationModal';
+import { LandingPage } from './components/landing/LandingPage';
 
 export function App() {
+  const [currentView, setCurrentView] = useState(() => {
+    return window.location.hash === '#dashboard' ? 'dashboard' : 'landing';
+  });
+
   const [dataSource, setDataSource] = useState('firms'); // 'firms' | 'fsi'
   const [mode, setMode] = useState('auto'); // 'auto' (Live NASA) | 'demo'
   const [selectedRegion, setSelectedRegion] = useState('india');
@@ -44,6 +49,32 @@ export function App() {
   const [activeRoute, setActiveRoute] = useState(null);
   const [selectedFingerprintFacility, setSelectedFingerprintFacility] = useState(null);
   const [selectedInvestigationEvent, setSelectedInvestigationEvent] = useState(null);
+
+  // Hash Change Listener for view synchronization
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+      if (hash === '#dashboard') {
+        setCurrentView('dashboard');
+      } else if (hash === '#landing' || !hash || hash === '#' || hash.startsWith('#features') || hash.startsWith('#how-it-works') || hash.startsWith('#use-cases') || hash.startsWith('#live-preview')) {
+        setCurrentView('landing');
+      }
+    };
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  const handleLaunchDashboard = useCallback(() => {
+    setCurrentView('dashboard');
+    window.location.hash = '#dashboard';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
+  const handleNavigateLanding = useCallback(() => {
+    setCurrentView('landing');
+    window.location.hash = '#';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
 
   // Sync theme with document element
   useEffect(() => {
@@ -182,6 +213,12 @@ export function App() {
     return { totalHotspots, totalClusters, totalAlerts, avgFrp };
   }, [allHotspots, clusters, alerts]);
 
+  // Landing Page View
+  if (currentView === 'landing') {
+    return <LandingPage onLaunchDashboard={handleLaunchDashboard} />;
+  }
+
+  // Operational Dashboard View
   return (
     <div className="flex flex-col h-screen w-screen bg-dark-900 overflow-hidden text-slate-100 transition-colors duration-200">
       {/* Top Operations Navigation Bar */}
@@ -201,6 +238,7 @@ export function App() {
         onRefresh={() => loadData(true)}
         loading={loading}
         stats={stats}
+        onNavigateLanding={handleNavigateLanding}
       />
 
       {/* Main Workspace Layout */}

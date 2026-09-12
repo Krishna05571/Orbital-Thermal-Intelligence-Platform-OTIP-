@@ -18,12 +18,18 @@ export function Navbar({
   onRefresh,
   loading = false,
   stats = { totalHotspots: 0, totalClusters: 0, totalAlerts: 0, avgFrp: 0 },
+  onNavigateLanding,
 }) {
   return (
     <header className="h-14 bg-dark-900 border-b border-dark-700 px-4 flex items-center justify-between gap-4 z-30 select-none shadow-sm transition-colors duration-200">
       {/* Left: Brand & Ingestion Toggle */}
       <div className="flex items-center gap-3">
-        <div className="flex items-center gap-2.5">
+        <button
+          type="button"
+          onClick={onNavigateLanding}
+          className="flex items-center gap-2.5 hover:opacity-90 transition-opacity text-left cursor-pointer"
+          title="Return to Landing Page"
+        >
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center shadow-md shadow-orange-600/20">
             <Flame className="w-4.5 h-4.5 text-white" />
           </div>
@@ -35,9 +41,21 @@ export function Navbar({
             </div>
             <span className="text-[10px] text-slate-400 font-medium">Orbital Thermal Intelligence Platform</span>
           </div>
-        </div>
+        </button>
 
         <div className="h-5 w-[1px] bg-dark-700 mx-1 hidden sm:block" />
+
+        {/* Back to Home / Landing Button */}
+        {onNavigateLanding && (
+          <button
+            type="button"
+            onClick={onNavigateLanding}
+            className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold text-slate-400 hover:text-white bg-dark-850 hover:bg-dark-750 border border-dark-700 transition-all cursor-pointer"
+            title="Return to Overview / Landing Page"
+          >
+            <span>Overview</span>
+          </button>
+        )}
 
         {/* Live Feed Status Pill */}
         <div className="flex items-center bg-dark-850 border border-dark-700 p-0.5 rounded-lg">
