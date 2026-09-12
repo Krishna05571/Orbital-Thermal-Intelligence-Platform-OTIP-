@@ -8,11 +8,14 @@ import { LandingLivePreview } from './LandingLivePreview';
 import { LandingCTA } from './LandingCTA';
 import { LandingFooter } from './LandingFooter';
 
-export function LandingPage({ onLaunchDashboard }) {
+export function LandingPage({ onLaunchDashboard, onNavigateAnalytics }) {
   return (
     <div className="min-h-screen w-full bg-[#0c1119] text-slate-100 flex flex-col selection:bg-orange-500/30 selection:text-orange-200">
       {/* Sticky Space-Tech Navigation */}
-      <LandingNavbar onLaunchDashboard={onLaunchDashboard} />
+      <LandingNavbar
+        onLaunchDashboard={onLaunchDashboard}
+        onNavigateAnalytics={onNavigateAnalytics}
+      />
 
       {/* Main Landing Sections */}
       <main className="flex-1 w-full">

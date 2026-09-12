@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Flame, Satellite, Menu, X, ArrowRight, Activity, ShieldCheck } from 'lucide-react';
 
-export function LandingNavbar({ onLaunchDashboard }) {
+export function LandingNavbar({ onLaunchDashboard, onNavigateAnalytics }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const scrollToSection = (e, id) => {
@@ -84,11 +84,16 @@ export function LandingNavbar({ onLaunchDashboard }) {
         </nav>
 
         {/* Right Action & Telemetry Beacon */}
-        <div className="hidden lg:flex items-center gap-4">
-          <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-dark-850/90 border border-dark-700/80 text-xs text-slate-300 font-mono">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-            <span className="text-slate-200">NASA FIRMS NRT</span>
-          </div>
+        <div className="hidden lg:flex items-center gap-3">
+          {onNavigateAnalytics && (
+            <button
+              type="button"
+              onClick={onNavigateAnalytics}
+              className="px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white bg-dark-850 hover:bg-dark-800 border border-dark-700 transition-all cursor-pointer"
+            >
+              Analytics
+            </button>
+          )}
 
           <button
             type="button"

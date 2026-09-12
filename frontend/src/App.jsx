@@ -16,11 +16,13 @@ import { FacilityFingerprintModal } from './components/FacilityFingerprintModal'
 import { EventInvestigationModal } from './components/EventInvestigationModal';
 import { HotspotDetailPanel } from './components/HotspotDetailPanel';
 import { AlertsPage } from './components/AlertsPage';
+import { AnalyticsDashboard } from './components/analytics/AnalyticsDashboard';
 import { LandingPage } from './components/landing/LandingPage';
 
 export function App() {
   const [currentView, setCurrentView] = useState(() => {
     const hash = window.location.hash;
+    if (hash === '#analytics') return 'analytics';
     if (hash === '#alerts') return 'alerts';
     if (hash === '#dashboard') return 'dashboard';
     return 'landing';
@@ -56,7 +58,9 @@ export function App() {
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash;
-      if (hash === '#alerts') {
+      if (hash === '#analytics') {
+        setCurrentView('analytics');
+      } else if (hash === '#alerts') {
         setCurrentView('alerts');
       } else if (hash === '#dashboard') {
         setCurrentView('dashboard');
@@ -77,6 +81,12 @@ export function App() {
   const handleNavigateAlerts = useCallback(() => {
     setCurrentView('alerts');
     window.location.hash = '#alerts';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
+  const handleNavigateAnalytics = useCallback(() => {
+    setCurrentView('analytics');
+    window.location.hash = '#analytics';
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
@@ -215,7 +225,56 @@ export function App() {
 
   // Landing Page View
   if (currentView === 'landing') {
-    return <LandingPage onLaunchDashboard={handleLaunchDashboard} />;
+    return (
+      <LandingPage
+        onLaunchDashboard={handleLaunchDashboard}
+        onNavigateAnalytics={handleNavigateAnalytics}
+      />
+    );
+  }
+
+  // Analytics Trends SaaS Dashboard View
+  if (currentView === 'analytics') {
+    return (
+      <div className="relative w-screen h-screen overflow-y-auto overflow-x-hidden bg-[#0a0e17]">
+        <AnalyticsDashboard
+          hotspots={allHotspots}
+          clusters={clusters}
+          alerts={alerts}
+          onNavigateDashboard={handleLaunchDashboard}
+          onNavigateLanding={handleNavigateLanding}
+          onNavigateAlerts={handleNavigateAlerts}
+          onViewFingerprint={(facility) => setSelectedFingerprintFacility(facility)}
+          onInvestigateEvent={(event) => setSelectedInvestigationEvent(event)}
+        />
+
+        {/* Facility Thermal Fingerprint Modal Dialog */}
+        {selectedFingerprintFacility && (
+          <FacilityFingerprintModal
+            facilityIdentifier={selectedFingerprintFacility}
+            mode={mode}
+            onClose={() => setSelectedFingerprintFacility(null)}
+            onInvestigateEvent={(event) => setSelectedInvestigationEvent(event)}
+          />
+        )}
+
+        {/* Incident Investigation Modal Dialog */}
+        {selectedInvestigationEvent && (
+          <EventInvestigationModal
+            event={selectedInvestigationEvent}
+            mode={mode}
+            onClose={() => setSelectedInvestigationEvent(null)}
+            onSetRoute={(route) => {
+              setActiveRoute(route);
+              setCurrentView('dashboard');
+              window.location.hash = '#dashboard';
+            }}
+            onShowTemporaryResources={setTemporarySafetyResources}
+            showingTemporaryResources={temporarySafetyResources.length > 0}
+          />
+        )}
+      </div>
+    );
   }
 
   // Alerts & Critical Events Page View
@@ -227,6 +286,7 @@ export function App() {
           hotspots={allHotspots}
           onNavigateDashboard={handleLaunchDashboard}
           onNavigateLanding={handleNavigateLanding}
+          onNavigateAnalytics={handleNavigateAnalytics}
           onInvestigateEvent={(event) => setSelectedInvestigationEvent(event)}
           onViewFingerprint={(facility) => setSelectedFingerprintFacility(facility)}
         />
@@ -280,6 +340,7 @@ export function App() {
         stats={stats}
         onNavigateLanding={handleNavigateLanding}
         onNavigateAlerts={handleNavigateAlerts}
+        onNavigateAnalytics={handleNavigateAnalytics}
         currentView={currentView}
       />
 

@@ -1,4 +1,4 @@
-import { RefreshCw, MapPin, Satellite, Flame, Trees, Bell } from 'lucide-react';
+import { RefreshCw, MapPin, Satellite, Flame, Trees, Bell, TrendingUp } from 'lucide-react';
 import { REGIONS, SENSORS } from '../constants/taxonomy';
 
 export function Navbar({
@@ -17,6 +17,7 @@ export function Navbar({
   stats = { totalHotspots: 0, totalClusters: 0, totalAlerts: 0, avgFrp: 0 },
   onNavigateLanding,
   onNavigateAlerts,
+  onNavigateAnalytics,
   currentView = 'dashboard',
 }) {
   return (
@@ -155,8 +156,25 @@ export function Navbar({
         </button>
       </div>
 
-      {/* Right Controls: Alerts Button */}
+      {/* Right Controls: Analytics & Alerts Button */}
       <div className="flex items-center gap-2">
+        {/* Analytics Trends Dashboard Navigation Button */}
+        {onNavigateAnalytics && (
+          <button
+            type="button"
+            onClick={onNavigateAnalytics}
+            className={`relative flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-all text-xs font-semibold cursor-pointer ${
+              currentView === 'analytics'
+                ? 'bg-sky-500/20 border-sky-500/50 text-sky-300 shadow-md shadow-sky-500/20'
+                : 'bg-dark-850 hover:bg-dark-750 border-dark-700 text-slate-300 hover:text-white'
+            }`}
+            title="Open Thermal Trends Analytics Dashboard"
+          >
+            <TrendingUp className="w-3.5 h-3.5 text-sky-400" />
+            <span className="hidden sm:inline">Analytics</span>
+          </button>
+        )}
+
         {/* Alerts & Critical Events Navigation Button */}
         {onNavigateAlerts && (
           <button

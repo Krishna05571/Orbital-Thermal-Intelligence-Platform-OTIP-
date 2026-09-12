@@ -23,6 +23,7 @@ import {
   RefreshCw,
   Bell,
   Thermometer,
+  TrendingUp,
 } from 'lucide-react';
 import { AlertMapPreview } from './AlertMapPreview';
 import { REGIONS } from '../constants/taxonomy';
@@ -32,6 +33,7 @@ export function AlertsPage({
   hotspots = [],
   onNavigateDashboard,
   onNavigateLanding,
+  onNavigateAnalytics,
   onInvestigateEvent,
   onViewFingerprint,
 }) {
@@ -311,6 +313,17 @@ export function AlertsPage({
               <span className="font-bold text-orange-400">{highCount}</span>
             </div>
           </div>
+
+          {onNavigateAnalytics && (
+            <button
+              type="button"
+              onClick={onNavigateAnalytics}
+              className="px-3 py-1.5 rounded-lg bg-dark-850 hover:bg-dark-800 border border-dark-700 text-xs font-semibold text-slate-300 hover:text-white transition-colors cursor-pointer hidden md:flex items-center gap-1.5"
+            >
+              <TrendingUp className="w-3.5 h-3.5 text-sky-400" />
+              <span>Analytics</span>
+            </button>
+          )}
 
           <button
             type="button"
