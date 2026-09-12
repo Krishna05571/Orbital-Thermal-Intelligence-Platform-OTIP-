@@ -15,11 +15,15 @@ import { REGIONS } from './constants/taxonomy';
 import { FacilityFingerprintModal } from './components/FacilityFingerprintModal';
 import { EventInvestigationModal } from './components/EventInvestigationModal';
 import { HotspotDetailPanel } from './components/HotspotDetailPanel';
+import { AlertsPage } from './components/AlertsPage';
 import { LandingPage } from './components/landing/LandingPage';
 
 export function App() {
   const [currentView, setCurrentView] = useState(() => {
-    return window.location.hash === '#dashboard' ? 'dashboard' : 'landing';
+    const hash = window.location.hash;
+    if (hash === '#alerts') return 'alerts';
+    if (hash === '#dashboard') return 'dashboard';
+    return 'landing';
   });
 
   const [dataSource, setDataSource] = useState('firms'); // 'firms' | 'fsi'
@@ -28,9 +32,6 @@ export function App() {
   const [selectedSensor, setSelectedSensor] = useState('VIIRS_SNPP_NRT');
   const [mapMode, setMapMode] = useState(() => {
     return localStorage.getItem('thermalwatch_map_mode') || 'hybrid';
-  });
-  const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('thermalwatch_theme') || 'dark';
   });
 
   const [loading, setLoading] = useState(false);
@@ -55,7 +56,9 @@ export function App() {
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash;
-      if (hash === '#dashboard') {
+      if (hash === '#alerts') {
+        setCurrentView('alerts');
+      } else if (hash === '#dashboard') {
         setCurrentView('dashboard');
       } else if (hash === '#landing' || !hash || hash === '#' || hash.startsWith('#features') || hash.startsWith('#how-it-works') || hash.startsWith('#use-cases') || hash.startsWith('#live-preview')) {
         setCurrentView('landing');
@@ -71,25 +74,21 @@ export function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
+  const handleNavigateAlerts = useCallback(() => {
+    setCurrentView('alerts');
+    window.location.hash = '#alerts';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
   const handleNavigateLanding = useCallback(() => {
     setCurrentView('landing');
     window.location.hash = '#';
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
-  // Sync theme with document element
+  // Enforce dark mode permanently
   useEffect(() => {
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-    localStorage.setItem('thermalwatch_theme', theme);
-  }, [theme]);
-
-  // Toggle Theme
-  const handleToggleTheme = useCallback(() => {
-    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+    document.documentElement.classList.add('dark');
   }, []);
 
   // Save map mode to localStorage
@@ -219,6 +218,48 @@ export function App() {
     return <LandingPage onLaunchDashboard={handleLaunchDashboard} />;
   }
 
+  // Alerts & Critical Events Page View
+  if (currentView === 'alerts') {
+    return (
+      <div className="relative w-screen h-screen overflow-hidden">
+        <AlertsPage
+          alerts={alerts}
+          hotspots={allHotspots}
+          onNavigateDashboard={handleLaunchDashboard}
+          onNavigateLanding={handleNavigateLanding}
+          onInvestigateEvent={(event) => setSelectedInvestigationEvent(event)}
+          onViewFingerprint={(facility) => setSelectedFingerprintFacility(facility)}
+        />
+
+        {/* Facility Thermal Fingerprint Modal Dialog (FACILITY-CENTRIC) */}
+        {selectedFingerprintFacility && (
+          <FacilityFingerprintModal
+            facilityIdentifier={selectedFingerprintFacility}
+            mode={mode}
+            onClose={() => setSelectedFingerprintFacility(null)}
+            onInvestigateEvent={(event) => setSelectedInvestigationEvent(event)}
+          />
+        )}
+
+        {/* Incident Investigation Modal Dialog (EVENT-CENTRIC) */}
+        {selectedInvestigationEvent && (
+          <EventInvestigationModal
+            event={selectedInvestigationEvent}
+            mode={mode}
+            onClose={() => setSelectedInvestigationEvent(null)}
+            onSetRoute={(route) => {
+              setActiveRoute(route);
+              setCurrentView('dashboard');
+              window.location.hash = '#dashboard';
+            }}
+            onShowTemporaryResources={setTemporarySafetyResources}
+            showingTemporaryResources={temporarySafetyResources.length > 0}
+          />
+        )}
+      </div>
+    );
+  }
+
   // Operational Dashboard View
   return (
     <div className="flex flex-col h-screen w-screen bg-dark-900 overflow-hidden text-slate-100 transition-colors duration-200">
@@ -234,12 +275,12 @@ export function App() {
         onSelectSensor={setSelectedSensor}
         mapMode={mapMode}
         onSelectMapMode={handleSelectMapMode}
-        theme={theme}
-        onToggleTheme={handleToggleTheme}
         onRefresh={() => loadData(true)}
         loading={loading}
         stats={stats}
         onNavigateLanding={handleNavigateLanding}
+        onNavigateAlerts={handleNavigateAlerts}
+        currentView={currentView}
       />
 
       {/* Main Workspace Layout */}
@@ -266,7 +307,6 @@ export function App() {
             ffdrGrid={ffdrGrid}
             temporarySafetyResources={temporarySafetyResources}
             mapMode={mapMode}
-            theme={theme}
             regionConfig={REGIONS[selectedRegion]}
             selectedHotspot={selectedHotspot}
             selectedCluster={selectedCluster}

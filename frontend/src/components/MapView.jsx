@@ -26,7 +26,6 @@ export function MapView({
   ffdrGrid = null,
   temporarySafetyResources = [],
   mapMode = 'hybrid', // 'standard' | 'thermal' | 'hybrid' | 'forest_risk'
-  theme = 'dark',
   regionConfig,
   selectedHotspot,
   selectedCluster,
@@ -121,7 +120,7 @@ export function MapView({
     };
   }, []);
 
-  // 2. Manage Dynamic Base Tile Layer (CARTO Dark / Voyager)
+  // 2. Manage Base Tile Layer (CARTO Dark)
   useEffect(() => {
     if (!map) return;
 
@@ -130,8 +129,7 @@ export function MapView({
     }
 
     const cartoKey = import.meta.env.VITE_CARTO_KEY || 'cb1_2jno_1_ef0c23ffe5f8a02710afad82';
-    const tileStyle = theme === 'dark' ? 'dark_all' : 'rastertiles/voyager';
-    const tileUrl = `https://basemaps.cartocdn.com/${tileStyle}/{z}/{x}/{y}.png?key=${cartoKey}`;
+    const tileUrl = `https://basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png?key=${cartoKey}`;
 
     const newTileLayer = L.tileLayer(tileUrl, {
       attribution: '&copy; <a href="https://carto.com/">CARTO</a> &copy; NASA FIRMS &copy; Forest Survey of India &copy; OpenRouteService',
@@ -140,7 +138,7 @@ export function MapView({
     }).addTo(map);
 
     baseTileLayerRef.current = newTileLayer;
-  }, [map, theme]);
+  }, [map]);
 
   // 3. Manage Region Pan/Zoom Navigation
   useEffect(() => {

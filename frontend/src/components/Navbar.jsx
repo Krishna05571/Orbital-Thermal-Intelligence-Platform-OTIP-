@@ -1,5 +1,4 @@
-import React from 'react';
-import { RefreshCw, MapPin, Satellite, Flame, Trees, Sun, Moon, Bell } from 'lucide-react';
+import { RefreshCw, MapPin, Satellite, Flame, Trees, Bell } from 'lucide-react';
 import { REGIONS, SENSORS } from '../constants/taxonomy';
 
 export function Navbar({
@@ -13,12 +12,12 @@ export function Navbar({
   onSelectSensor,
   mapMode = 'hybrid',
   onSelectMapMode,
-  theme = 'dark',
-  onToggleTheme,
   onRefresh,
   loading = false,
   stats = { totalHotspots: 0, totalClusters: 0, totalAlerts: 0, avgFrp: 0 },
   onNavigateLanding,
+  onNavigateAlerts,
+  currentView = 'dashboard',
 }) {
   return (
     <header className="h-14 bg-dark-900 border-b border-dark-700 px-4 flex items-center justify-between gap-4 z-30 select-none shadow-sm transition-colors duration-200">
@@ -156,35 +155,29 @@ export function Navbar({
         </button>
       </div>
 
-      {/* Right Controls: Notifications & Theme Toggle */}
+      {/* Right Controls: Alerts Button */}
       <div className="flex items-center gap-2">
-        {/* Notifications Icon with Badge */}
-        <button
-          type="button"
-          className="relative p-1.5 rounded-lg bg-dark-850 hover:bg-dark-750 border border-dark-700 transition-all text-slate-300 hover:text-white"
-          title={`${stats.totalAlerts} Critical Events Detected`}
-        >
-          <Bell className="w-4 h-4" />
-          {stats.totalAlerts > 0 && (
-            <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white rounded-full text-[9px] font-bold flex items-center justify-center font-mono">
-              {stats.totalAlerts}
-            </span>
-          )}
-        </button>
-
-        {/* Theme Toggle */}
-        <button
-          type="button"
-          onClick={onToggleTheme}
-          className="p-1.5 rounded-lg bg-dark-850 hover:bg-dark-750 border border-dark-700 transition-all text-slate-300 hover:text-white"
-          title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-        >
-          {theme === 'dark' ? (
-            <Sun className="w-4 h-4 text-amber-400" />
-          ) : (
-            <Moon className="w-4 h-4 text-slate-300" />
-          )}
-        </button>
+        {/* Alerts & Critical Events Navigation Button */}
+        {onNavigateAlerts && (
+          <button
+            type="button"
+            onClick={onNavigateAlerts}
+            className={`relative flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-all text-xs font-semibold cursor-pointer ${
+              currentView === 'alerts'
+                ? 'bg-red-500/20 border-red-500/50 text-red-300 shadow-md shadow-red-500/20'
+                : 'bg-dark-850 hover:bg-dark-750 border-dark-700 text-slate-300 hover:text-white'
+            }`}
+            title="Open Alerts & Critical Events Page"
+          >
+            <Bell className={`w-3.5 h-3.5 ${stats.totalAlerts > 0 ? 'text-red-400 animate-pulse' : ''}`} />
+            <span className="hidden sm:inline">Alerts</span>
+            {stats.totalAlerts > 0 && (
+              <span className="px-1.5 py-0.2 rounded-full bg-red-500 text-white text-[10px] font-bold font-mono">
+                {stats.totalAlerts}
+              </span>
+            )}
+          </button>
+        )}
       </div>
     </header>
   );
