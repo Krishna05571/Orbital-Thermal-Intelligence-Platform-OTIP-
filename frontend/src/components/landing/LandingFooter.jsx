@@ -10,8 +10,8 @@ export function LandingFooter() {
           
           {/* Brand & Mission */}
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-orange-500 to-red-600 flex items-center justify-center shadow-md shadow-orange-500/20">
-              <Flame className="w-4 h-4 text-white" />
+            <div className="w-8 h-8 rounded-lg overflow-hidden bg-dark-950 border border-orange-500/30 flex items-center justify-center shadow-md shadow-orange-500/20">
+              <img src="/logo.png" alt="OTIP Logo" className="w-full h-full object-cover" />
             </div>
             <div>
               <div className="flex items-center gap-2">

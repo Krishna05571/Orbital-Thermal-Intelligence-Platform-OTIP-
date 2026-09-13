@@ -30,8 +30,8 @@ export function Navbar({
           className="flex items-center gap-2.5 hover:opacity-90 transition-opacity text-left cursor-pointer"
           title="Return to Landing Page"
         >
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center shadow-md shadow-orange-600/20">
-            <Flame className="w-4.5 h-4.5 text-white" />
+          <div className="relative w-8 h-8 rounded-lg overflow-hidden border border-orange-500/30 shadow-md shadow-orange-600/20 bg-dark-950 flex items-center justify-center">
+            <img src="/logo.png" alt="OTIP Logo" className="w-full h-full object-cover" />
           </div>
           <div>
             <div className="flex items-center gap-1.5 leading-none">

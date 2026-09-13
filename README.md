@@ -1,5 +1,11 @@
+<p align="center">
+  <img src="assets/logo.png" alt="OTIP - Orbital Thermal Intelligence Platform" width="320" style="border-radius: 16px;" />
+</p>
+
 # Orbital Thermal Intelligence Platform (OTIP) 🛰️🔥
 ### *AI-Assisted Orbital Thermal Intelligence, Industrial Anomaly Detection & Emergency Response Platform*
+*SEE • DETECT • PROTECT*
+
 
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688.svg?style=flat&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![React](https://img.shields.io/badge/React-18.3.1-61DAFB.svg?style=flat&logo=react&logoColor=black)](https://reactjs.org)

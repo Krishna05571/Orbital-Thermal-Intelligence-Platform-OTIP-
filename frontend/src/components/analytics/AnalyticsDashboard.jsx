@@ -474,9 +474,12 @@ export function AnalyticsDashboard({
 
   <!-- 1. Header & Official Seal -->
   <div class="header-box">
-    <div>
-      <h1 class="brand-title">OTIP • Executive Thermal Intelligence Dossier</h1>
-      <p class="brand-sub">Orbital Earth Observation & Autonomous Anomaly Analytics</p>
+    <div style="display: flex; align-items: center; gap: 14px;">
+      <img src="/logo.png" style="width: 46px; height: 46px; border-radius: 8px; object-fit: cover; border: 1px solid #fed7aa;" alt="OTIP" />
+      <div>
+        <h1 class="brand-title">OTIP • Executive Thermal Intelligence Dossier</h1>
+        <p class="brand-sub">Orbital Earth Observation & Autonomous Anomaly Analytics</p>
+      </div>
     </div>
     <div class="dossier-badge">
       <div>DOC ID: ${filename.slice(0, 26)}</div>

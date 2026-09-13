@@ -26,14 +26,8 @@ export function LandingNavbar({ onLaunchDashboard, onNavigateAnalytics }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Brand Logo */}
         <div className="flex items-center gap-3 cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-          <div className="relative">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-orange-600 via-red-500 to-amber-400 flex items-center justify-center shadow-lg shadow-orange-500/25 border border-orange-400/30">
-              <Flame className="w-5 h-5 text-white animate-pulse" />
-            </div>
-            <span className="absolute -bottom-1 -right-1 flex h-3 w-3">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-cyan-500 border-2 border-dark-950"></span>
-            </span>
+          <div className="w-10 h-10 rounded-xl overflow-hidden shadow-lg shadow-orange-500/25 border border-orange-400/40 bg-dark-950 flex items-center justify-center">
+            <img src="/logo.png" alt="OTIP Logo" className="w-full h-full object-cover" />
           </div>
 
           <div>
