@@ -53,6 +53,7 @@ export function App() {
   const [activeRoute, setActiveRoute] = useState(null);
   const [selectedFingerprintFacility, setSelectedFingerprintFacility] = useState(null);
   const [selectedInvestigationEvent, setSelectedInvestigationEvent] = useState(null);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   // Hash Change Listener for view synchronization
   useEffect(() => {
@@ -338,6 +339,8 @@ export function App() {
         onRefresh={() => loadData(true)}
         loading={loading}
         stats={stats}
+        sidebarCollapsed={sidebarCollapsed}
+        onToggleSidebar={() => setSidebarCollapsed(!sidebarCollapsed)}
         onNavigateLanding={handleNavigateLanding}
         onNavigateAlerts={handleNavigateAlerts}
         onNavigateAnalytics={handleNavigateAnalytics}
@@ -356,6 +359,8 @@ export function App() {
           onSelectFilterClass={setFilterClass}
           activeDate={activeDate}
           stats={stats}
+          isCollapsed={sidebarCollapsed}
+          onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
         />
 
         {/* Center / Dominant GIS Map Area */}
@@ -410,15 +415,13 @@ export function App() {
             </div>
           )}
 
-          {/* Floating Timeline Scrubbing Controls (Bottom Center) */}
+          {/* Floating Draggable Timeline Playback Scrubber */}
           {timelineDates.length > 1 && (
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-[1000]">
-              <TimelineSlider
-                dates={timelineDates}
-                currentIndex={timelineIndex}
-                onChangeIndex={(idx) => setTimelineIndex(idx)}
-              />
-            </div>
+            <TimelineSlider
+              dates={timelineDates}
+              currentIndex={timelineIndex}
+              onChangeIndex={(idx) => setTimelineIndex(idx)}
+            />
           )}
         </main>
 
